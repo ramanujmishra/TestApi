@@ -1,0 +1,32 @@
+trigger:
+- main
+
+pr:
+- main
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetVersion: '8.x'
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    version: $(dotnetVersion)
+
+- script: dotnet restore
+  displayName: Restore
+
+- script: dotnet build --configuration $(buildConfiguration) --no-restore
+  displayName: Build
+
+- script: dotnet test --configuration $(buildConfiguration) --no-build
+  displayName: Test
+
+- script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)
+  displayName: Publish
+
+- publish: $(Build.ArtifactStagingDirectory)
+  artifact: drop
