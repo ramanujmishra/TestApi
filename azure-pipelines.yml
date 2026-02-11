@@ -9,7 +9,7 @@ variables:
   dotnetVersion: '8.x'
 
 pool:
-  vmImage: 'windows-latest'
+  name: Default
 
 steps:
 - task: UseDotNet@2
