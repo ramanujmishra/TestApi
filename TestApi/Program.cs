@@ -35,12 +35,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//needed for CORS policy to allow React app to call this API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddAuthorization();
 //JWT token support
 
 var app = builder.Build();
 
 app.UseAuthentication();   // must come before UseAuthorization
+app.UseCors("AllowReactApp");
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.

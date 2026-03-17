@@ -18,7 +18,8 @@ namespace TestApi
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username)
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, "Admin") // access role added, in live, it should read the role admin from db for the user
             };
 
             var key = new SymmetricSecurityKey(
