@@ -9,7 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<TokenService>();
 
-builder.Services.AddControllers();
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
+//builder.Services.AddControllers(); // doesnt support [ValidateAntiForgeryToken] because it doesn't include the necessary services
+
+
+builder.Services.AddControllersWithViews();// needed for [ValidateAntiForgeryToken] to work,
+                                           // it adds the necessary services for antiforgery token validation
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -4,7 +4,7 @@ using TestApi.Models;
 
 namespace TestApi.Controllers
 {
-    //[ApiController]
+    [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly TokenService _tokenService;
@@ -28,6 +28,7 @@ namespace TestApi.Controllers
         }
 
         [HttpPost("loginWithHttpOnlyCookie")]
+        [ValidateAntiForgeryToken]
         public IActionResult LoginForHttpOnlyCookie(LoginRequest request)
         {
             if (request.Username == "admin" && request.Password == "1234")
@@ -47,6 +48,9 @@ namespace TestApi.Controllers
         }
 
         [HttpPost("logout")]
+        [ValidateAntiForgeryToken] // it checks for a valid antiforgery token in the request header,
+                                   // which helps prevent CSRF attacks by ensuring that the request is coming
+                                   // from a trusted source (like your frontend) rather than a malicious third party.
         public IActionResult Logout()
         {
             Response.Cookies.Delete("token", new CookieOptions

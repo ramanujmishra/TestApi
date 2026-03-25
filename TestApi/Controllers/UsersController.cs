@@ -10,6 +10,7 @@ namespace TestApi.Controllers
     public class UsersController : ControllerBase
     {
         [HttpGet]
+        [ValidateAntiForgeryToken] // for csrf protection, client must include valid antiforgery token in request header
         public async Task<IActionResult> Index()
         {
             var httpClient = new HttpClient();
